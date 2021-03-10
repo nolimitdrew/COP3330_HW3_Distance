@@ -1,0 +1,66 @@
+Programming Assignment #3
+Due: Tues, Feb 16
+Objective
+To gain experience with basic operator overloading.
+Task
+Your task will be to create a class called Distance, in the files "distance.h" and "distance.cpp", which will involve a variety of operator overloads. A Distance object will store a quantity of distance, in terms of miles, yards, feet, and inches. You will overload some basic operators for use with these objects, including arithmetic, comparison, and insertion/extraction (I/O) operators. Note: These operations must work even for large distances (i.e. fairly large nubmers of miles) and should not overflow the capacity of the storage variables (ints) unless the actual number of miles is very close to the upper limit of int storage.
+Details and Requirements:
+The Distance class must allow for storage of a non-negative quantity of distance, in terms of miles, yards, feet, and inches, using integer precision. All values should be non-negative. The data should always be maintained in a simplified form. Example: if you have 14 inches, this should be expressed as 1 foot, 2 inches. Remember that there are 12 inches in a foot, 3 feet in a yard, and 1760 yards in a mile. There is no limit on the number of miles. You should create appropriate member data in your class. All member data must be private.
+ 
+Constructors
+The class should have a default constructor (no parameters), which should initialize the object so that it represents the distance 0.
+The class should also have a constructor with a single integer parameter, which represents a quantity of inches -- this should be translated into the appropriate notation for a Distance object. Note that this constructor with a single parameter will be a "conversion constructor" that allows automatic type conversions from "int" to "Distance". If the parameter is negative, default the Distance object to represent 0.
+The class should also have a constructor that takes 4 parameters, representing the miles, yards, feet, and inches to use for initializing the object. If any of the provided values are negative, default the Distance object to represent 0. If any of the provided values are too high (but all non-negative), simplify the object to the appropriate representation
+Examples:
+ Distance t;	// this creates an object which is 0 miles, 0 yards, 0 feet, 0 inches
+ Distance s(1234);  // this creates an object representing 0 miles, 34 yards, 0 feet, 10 inches
+ Distance r(-123);  // creates an object representing 0 miles, 0 yards, 0 feet, 0 inches
+ Distance d(1234567);  // creates an object representing 19 miles, 853 yards, 1 feet, 7 inches
+
+ t = 4321;      // conversion constructor allows this assignment.
+	        // t now stores 0 miles, 120 yards, 0 feet, 1 inch
+
+ Distance x(1, 3, 2, 7);	 // 1 mile, 3 yards, 2 feet, 7 inches
+ Distance y(2, -4, 6, 8);	 // creates object representing 0, since -4 yards not legal
+ Distance z(3, 5, 7, 9);	 // 3 miles, 7 yards, 1 feet, 9 inches (simplified)
+Create an overload of the insertion operator << for output of Distance objects. A distance object should be printed in the format: (MILESm YARDSy FEET' INCHES") -- where MILES is the number of miles, YARDS is number of yards, FEET is number of feet, and INCHES is number of inches. Note that the characters 'm' and 'y' should appear after the first two values, respectively, and the markers ' and " are the standard notations for feet and inches. The whole output should be inside a set of parintheses (). Also, for the first three values, ONLY print them if they are non-zero. Always print inches. Examples:
+Output                  // Interpretation
+(2m 13y 2' 9")          // means 2 miles, 13 yards, 2 feet, 9 inches
+(89m 175y 4")           // means 89 miles, 175 yards, 0 feet, 4 inches
+(2' 10")                // means 0 miles, 0 yards, 2 feet, 10 inches
+(0")                    // means a distance of 0
+
+Create an overload of the extraction operator >> for reading Distance objects from an input stream.  The format for the input of a Distance object is MILES,YARDS,FEET,INCHES, where the user is to type the values as a comma-separated list. You may assume that keyboard input will always be entered in this format (4 integers separated by commas). This operator will need to do some error checking, as well.  If any of the input values are negative, this is an illegal Distance quantity, and the entire object should default to the value 0 (0 miles, yards, feet, inches).  If any of the values are over the allowable limit (i.e. not in simplified form), then this function should adjust the Distance object so that it is in simplified form.  Example:  If the input is 0,0,4,13, then it should be simplified to 1 yard, 2 feet, 1 inch, because that is equivalent to 4 feet and 13 inches. Examples of input format:
+  13,5,2,8		// input translates to (13m 5y 2' 8")
+  0,0,4,13		// input translates to (1y 2' 1")
+Create overloads for the + operator and the - operator to allow addition and subtraction of two quantities of distance.  Results should always be returned in the simplified form.  For subtraction, if the first quantity of distance is less than the second (which would normally result in a negative quantity), return the Distance object (0") instead. Examples:
+(3m 7y 1' 9") + (2m 6y 8") = (5m 13y 2' 5")
+(3m 7y 1' 9") - (2m 6y 8") = (1m 1y 1' 1")
+(1m 6y 9") + (2m 5y 2' 7") = (3m 12y 4")
+(1m 6y 9") - (2m 5y 2' 7") = (0")
+
+Create an overload for the * operator, to allow a Distance object to be multiplied with an integer multiplier. The result, as usual, should be expressed in simplified format. Examples:
+  Distance d1(1,500,2,5);   // (1m 500y 2' 5")
+
+  cout << d1 * 3;	  // d1 * 3 yields:  (3m 1502y 1' 3")
+  cout << d1 * 5;	  // d1 * 5 yields:  (6m 744y 1")
+Create overloads for all 6 of the comparison operators ( < , > , <= , >= , == , != ).  Each of these operations should test two objects of type Distance and return true or false. You are testing the Distance objects for order and/or equality based on whether one quantity of distance is more than (less than, equal to, etc) another.
+ 
+Create overloads for the increment and decrement operators (++ and --). You need to handle both the pre- and post- forms (pre-increment, post-increment, pre-decrement, post-decrement). These operators should have their usual meaning -- increment will add 1 inch to the Distance value, decrement will subtract 1 inch. If the distance object is already at 0, then decrement doesn't change it (i.e. you still never will have a negative distance value). Examples:
+  // suppose d1 is (2m 10y 2' 10")
+  // suppose d2 is (5m 51y 1' 1")
+  cout << d1++;            //  prints (2m 10y 2' 10"), d1 is now (2m 10y 2' 11")
+  cout << ++d1;            //  prints (2m 11y 0"), d1 is now (2m 11y 0")
+  cout << d2--;            //  prints (5m 51y 1' 1"), d2 is now (5m 51y 1' 0")
+  cout << --d2;            //  prints (5m 51y 11"), d2 is now (5m 51y 11")
+General Requirements
+As usual, no global variables
+All member data of the Distance class must be private
+Use the const qualifier whenever appropriate
+The only library that may be used in the class files is iostream
+Since the only output involved with your class will be in the << overload (and commands to invoke it will come from some main program or other module), your output should match mine exactly when running test programs.
+Sample Test Program
+You are encouraged to create your own test program(s), but the following is a main program to get you started. This does not give a comprehensive set of tests, but it should give you an idea of the types of calls that can be made. Sample main program
+Submit the following files using the normal web submission site:
+  distance.h
+  distance.cpp
